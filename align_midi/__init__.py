@@ -145,14 +145,8 @@ def midi_to_cqt(midi, sf2_path=None, fs=22050, hop=512):
     Output:
         midi_gram - Simulated CQT of the midi data
     '''
-    # Create a copy of the midi object
-    midi_no_drums = copy.deepcopy(midi)
-    # Remove the drums
-    for n, instrument in enumerate(midi_no_drums.instruments):
-        if instrument.is_drum:
-            del midi_no_drums.instruments[n]
     # Synthesize the MIDI using the supplied sf2 path
-    midi_audio = midi_no_drums.fluidsynth(fs=fs, sf2_path=sf2_path)
+    midi_audio = midi.fluidsynth(fs=fs, sf2_path=sf2_path)
     # Use the harmonic part of the signal
     H, P = librosa.decompose.hpss(librosa.stft(midi_audio))
     midi_audio_harmonic = librosa.istft(H)
